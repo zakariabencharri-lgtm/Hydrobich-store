@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroBich - Produits Hydroponiques</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
+            color: #333;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            margin: 0.25rem 0 0 0;
+            opacity: 0.9;
+        }
+
+        .cart-btn {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .cart-btn:hover {
+            background-color: white;
+            color: #059669;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Products */
+        .products {
+            padding: 3rem 1rem;
+            background-color: #ffffff;
+        }
+
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .products-container h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #059669;
+            margin-bottom: 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-card h3 {
+            font-size: 1.3rem;
+            color: #1f2937;
+            margin: 1rem 1rem 0.5rem 1rem;
+        }
+
+        .description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin: 0 1rem;
+            flex: 1;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: #10b981;
+            font-weight: bold;
+            margin: 1rem 1rem 0.5rem 1rem;
+        }
+
+        .quantity-selector {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-selector label {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .quantity-selector input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            margin: 0 1rem 1rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #059669;
+        }
+
+        /* Cart */
+        .cart-section {
+            padding: 3rem 1rem;
+            background-color: #f9fafb;
+            min-height: 60vh;
+            display: none;
+        }
+
+        .cart-section.active {
+            display: block;
+        }
+
+        .cart-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cart-container h2 {
+            font-size: 2rem;
+            color: #059669;
+            margin-bottom: 2rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.1rem;
+            padding: 2rem;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info h3 {
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .item-info p {
+            margin: 0.25rem 0 0 0;
+            color: #6b7280;
+        }
+
+        .item-quantity {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .item-quantity button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .item-quantity input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 0.5rem;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: #10b981;
+            text-align: right;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-summary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .cart-summary h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .checkout-btn {
+            background-color: white;
+            color: #059669;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Contact */
+        .contact {
+            padding: 3rem 1rem;
+            background-color: #ffffff;
+            display: none;
+        }
+
+        .contact.active {
+            display: block;
+        }
+
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-container h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #059669;
+            margin-bottom: 2rem;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5rem;
+            color: #059669;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            margin: 0.75rem 0;
+            color: #374151;
+        }
+
+        .contact-info a {
+            color: #10b981;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .info-text {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #6b7280;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+        }
+
+        .contact-form button {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #059669;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .products-section.hidden,
+        .contact-section.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <h1>🌱 HydroBich</h1>
+                    <p class="subtitle">Produits Hydroponiques Premium</p>
+                </div>
+                <button class="cart-btn" onclick="toggleCart()">
+                    🛒 Panier (<span id="cartCount">0</span>)
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Hero -->
+            <section class="hero">
+                <h2>Bienvenue chez HydroBich</h2>
+                <p>Produits hydroponiques frais et de qualité, cultivés à Setif, Algérie</p>
+                <p class="tagline">🌿 Sans pesticides • 💪 Riche en nutriments • ⚡ Livraison rapide</p>
+            </section>
+
+            <!-- Products Section -->
+            <section class="products-section">
+                <section class="products">
+                    <div class="products-container">
+                        <h2>Nos Produits</h2>
+                        <div class="products-grid" id="productsGrid">
+                            <!-- Les produits seront générés par JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact Section -->
+                <section class="contact">
+                    <div class="contact-container">
+                        <h2>Nous Contacter</h2>
+                        <div class="contact-content">
+                            <div class="contact-info">
+                                <h3>HydroBich</h3>
+                                <p><strong>📍 Localisation :</strong> Setif, Algérie</p>
+                                <p><strong>📧 Email :</strong> <a href="mailto:benchari@benchari.com">benchari@benchari.com</a></p>
+                                <p><strong>👤 Propriétaire :</strong> Zakaria Benchari</p>
+                                <p class="info-text">Contactez-nous pour des questions sur nos produits, les commandes en gros, ou des partenariats.</p>
+                            </div>
+                            <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                                <input type="text" id="contactName" placeholder="Votre nom" required>
+                                <input type="email" id="contactEmail" placeholder="Votre email" required>
+                                <input type="tel" id="contactPhone" placeholder="Votre téléphone">
+                                <textarea id="contactMessage" placeholder="Votre message" rows="5" required></textarea>
+                                <button type="submit">Envoyer</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Cart Section -->
+            <section class="cart-section" id="cartSection">
+                <div class="cart-container">
+                    <h2>Votre Panier</h2>
+                    <div id="cartContent">
+                        <!-- Le contenu du panier sera généré par JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2026 HydroBich. Tous droits réservés.</p>
+                <p>Zakaria Benchari • Setif, Algérie</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Data
+        const products = [
+            {
+                id: 1,
+                name: 'Maïs Hydroponique',
+                price: 30,
+                image: 'https://images.unsplash.com/photo-1460072221718-8a3b9f0067c3?w=500&h=500&fit=crop',
+                description: 'Maïs frais cultivé de manière hydroponique, sans pesticides'
+            },
+            {
+                id: 2,
+                name: 'Fourrage Hydroponique',
+                price: 35,
+                image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&h=500&fit=crop',
+                description: 'Fourrage vert hydroponique riche en nutriments pour l\'élevage'
+            }
+        ];
+
+        let cart = [];
+        let quantities = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+        });
+
+        // Render products
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="description">${product.description}</p>
+                    <p class="price">${product.price} DA/kg</p>
+                    <div class="quantity-selector">
+                        <label for="qty-${product.id}">Quantité (kg) :</label>
+                        <input type="number" id="qty-${product.id}" min="1" value="1">
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                        Ajouter au panier
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const quantityInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(quantityInput.value) || 1;
+
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity });
+            }
+
+            updateCartCount();
+            quantityInput.value = 1;
+            alert(`${product.name} ajouté au panier !`);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            const cartSection = document.getElementById('cartSection');
+            const productsSection = document.querySelector('.products-section');
+            
+            cartSection.classList.toggle('active');
+            productsSection.classList.toggle('hidden');
+
+            if (cartSection.classList.contains('active')) {
+                renderCart();
+            }
+        }
+
+        // Render cart
+        function renderCart() {
+            const cartContent = document.getElementById('cartContent');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = '<p class="empty-cart">Votre panier est vide</p>';
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartContent.innerHTML = `
+                <div class="cart-items">
+                    ${cart.map((item, index) => `
+                        <div class="cart-item">
+                            <div class="item-info">
+                                <h3>${item.name}</h3>
+                                <p>${item.price} DA/kg</p>
+                            </div>
+                            <div class="item-quantity">
+                                <button onclick="updateQuantity(${index}, ${item.quantity - 1})">−</button>
+                                <input type="number" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)" min="1">
+                                <button onclick="updateQuantity(${index}, ${item.quantity + 1})">+</button>
+                            </div>
+                            <div class="item-total">
+                                ${(item.price * item.quantity).toFixed(2)} DA
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">✕</button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="cart-summary">
+                    <h3>Total : ${total.toFixed(2)} DA</h3>
+                    <button class="checkout-btn" onclick="checkout()">Procéder à la commande</button>
+                </div>
+            `;
+        }
+
+        // Update quantity
+        function updateQuantity(index, quantity) {
+            quantity = parseInt(quantity);
+            if (quantity <= 0) {
+                removeFromCart(index);
+            } else {
+                cart[index].quantity = quantity;
+                renderCart();
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            renderCart();
+        }
+
+        // Checkout
+        function checkout() {
+            const items = cart.map(item => `${item.name}: ${item.quantity}kg @ ${item.price}DA/kg = ${(item.price * item.quantity).toFixed(2)}DA`).join('\n');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            const message = `Nouvelle commande HydroBich\n\n${items}\n\nTotal: ${total.toFixed(2)} DA\n\nMerci de confirmer cette commande.`;
+
+            const mailtoLink = `mailto:benchari@benchari.com?subject=Nouvelle commande HydroBich&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // Contact form submit
+        function handleContactSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const phone = document.getElementById('contactPhone').value;
+            const message = document.getElementById('contactMessage').value;
+
+            const mailtoLink = `mailto:benchari@benchari.com?subject=Contact de ${name}&body=Nom: ${name}%0AEmail: ${email}%0ATéléphone: ${phone}%0AMémo: ${message}`;
+            window.location.href = mailtoLink;
+
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactPhone').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+    </script>
+</body>
+  </html>
